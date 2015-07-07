@@ -1,115 +1,28 @@
-
-ListDLLs v3.1 - List loaded DLLs
-Copyright (C) 1997-2011 Mark Russinovich
-Sysinternals - www.sysinternals.com
-
-------------------------------------------------------------------------------
-python.exe pid: 3148
-Command line: python  mssh.py
-
-Base        Size      Path
-0x1ce20000  0xb000    C:\Python34\python.exe
-0x777c0000  0x13c000  C:\Windows\SYSTEM32\ntdll.dll
-0x76d90000  0xd4000   C:\Windows\system32\kernel32.dll
-0x75910000  0x4b000   C:\Windows\system32\KERNELBASE.dll
-0x68f70000  0x2a9000  C:\Windows\system32\python34.dll
-0x772f0000  0xc9000   C:\Windows\system32\USER32.dll
-0x77770000  0x4e000   C:\Windows\system32\GDI32.dll
-0x77900000  0xa000    C:\Windows\system32\LPK.dll
-0x76ea0000  0x9d000   C:\Windows\system32\USP10.dll
-0x776c0000  0xac000   C:\Windows\system32\msvcrt.dll
-0x75bc0000  0xa0000   C:\Windows\system32\ADVAPI32.dll
-0x76b50000  0x19000   C:\Windows\SYSTEM32\sechost.dll
-0x77240000  0xa2000   C:\Windows\system32\RPCRT4.dll
-0x75c60000  0xc4a000  C:\Windows\system32\SHELL32.dll
-0x77160000  0x57000   C:\Windows\system32\SHLWAPI.dll
-0x6b960000  0xbf000   C:\Windows\system32\MSVCR100.dll
-0x77910000  0x1f000   C:\Windows\system32\IMM32.DLL
-0x76a80000  0xcc000   C:\Windows\system32\MSCTF.dll
-0x75230000  0x17000   C:\Windows\system32\CRYPTSP.dll
-0x74fd0000  0x3b000   C:\Windows\system32\rsaenh.dll
-0x75710000  0xc000    C:\Windows\system32\CRYPTBASE.dll
-0x6f4f0000  0x15000   C:\Python34\DLLs\python3.dll
-0x62600000  0x3c000   C:\Python34\lib\site-packages\gi\_gi.pyd
-0x6b940000  0xe000    C:\Python34\Lib\site-packages\gnome\libffi-6.dll
-0x660c0000  0x2b000   C:\Python34\Lib\site-packages\gnome\libgirepository-1.0-1.dll
-0x6d780000  0x104000  C:\Python34\Lib\site-packages\gnome\libgio-2.0-0.dll
-0x6df00000  0xc000    C:\Python34\Lib\site-packages\gnome\libgmodule-2.0-0.dll
-0x687c0000  0x102000  C:\Python34\Lib\site-packages\gnome\libglib-2.0-0.dll
-0x77560000  0x15c000  C:\Windows\system32\ole32.dll
-0x73ef0000  0x32000   C:\Windows\system32\WINMM.DLL
-0x75b80000  0x35000   C:\Windows\system32\WS2_32.dll
-0x77940000  0x6000    C:\Windows\system32\NSI.dll
-0x61ec0000  0x1e000   C:\Python34\Lib\site-packages\gnome\libintl-8.dll
-0x63c40000  0x3a000   C:\Python34\Lib\site-packages\gnome\libgobject-2.0-0.dll
-0x750b0000  0x44000   C:\Windows\system32\DNSAPI.DLL
-0x72e60000  0x1c000   C:\Windows\system32\IPHLPAPI.DLL
-0x72e40000  0x7000    C:\Windows\system32\WINNSI.DLL
-0x68680000  0x34000   C:\Python34\Lib\site-packages\gnome\libzzz.dll
-0x64b40000  0x12000   C:\Python34\Lib\site-packages\gnome\libwinpthread-1.dll
-0x66600000  0x566000  C:\Python34\Lib\site-packages\gnome\libgtk-3-0.dll
-0x710c0000  0x84000   C:\Python34\Lib\site-packages\gnome\libgdk-3-0.dll
-0x6fe80000  0x104000  C:\Python34\Lib\site-packages\gnome\libcairo-gobject-2.dll
-0x73620000  0x5000    C:\Windows\system32\MSIMG32.DLL
-0x65180000  0x4a000   C:\Python34\Lib\site-packages\gnome\libfontconfig-1.dll
-0x70180000  0x108000  C:\Python34\Lib\site-packages\gnome\libxmlxpat.dll
-0x01fe0000  0x6f000   C:\Python34\Lib\site-packages\gnome\libfreetype-6.dll
-0x67a00000  0x6a000   C:\Python34\Lib\site-packages\gnome\libharfbuzz-gobject-0.dll
-0x68d40000  0x2c000   C:\Python34\Lib\site-packages\gnome\libpng16-16.dll
-0x65540000  0x36000   C:\Python34\Lib\site-packages\gnome\libgdk_pixbuf-2.0-0.dll
-0x741c0000  0x190000  C:\Windows\WinSxS\x86_microsoft.windows.gdiplus_6595b64144ccf1df_1.1.7601.18120_none_72d2e82386681b36\gdiplus.dll
-0x619c0000  0x3f000   C:\Python34\Lib\site-packages\gnome\libjasper-1.dll
-0x02050000  0x6a000   C:\Python34\Lib\site-packages\gnome\libjpeg-8.dll
-0x020c0000  0x45000   C:\Python34\Lib\site-packages\gnome\librsvg-2-2.dll
-0x65780000  0x43000   C:\Python34\Lib\site-packages\gnome\libpango-1.0-0.dll
-0x6d6c0000  0x13000   C:\Python34\Lib\site-packages\gnome\libpangocairo-1.0-0.dll
-0x6d900000  0x16000   C:\Python34\Lib\site-packages\gnome\libpangoft2-1.0-0.dll
-0x6b480000  0x15000   C:\Python34\Lib\site-packages\gnome\libpangowin32-1.0-0.dll
-0x6f740000  0x3b000   C:\Python34\Lib\site-packages\gnome\libwebp-5.dll
-0x744c0000  0x19e000  C:\Windows\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_6.0.7601.18837_none_41e855142bd5705d\COMCTL32.DLL
-0x771c0000  0x7b000   C:\Windows\system32\COMDLG32.DLL
-0x72890000  0x51000   C:\Windows\system32\WINSPOOL.DRV
-0x62b40000  0x21000   C:\Python34\Lib\site-packages\gnome\libatk-1.0-0.dll
-0x68bc0000  0x6e000   C:\Python34\Lib\site-packages\gnome\libgtksourceview-3.0-1.dll
-0x6f4a0000  0xe000    C:\Python34\DLLs\_socket.pyd
-0x69ec0000  0xc4000   C:\Python34\DLLs\_hashlib.pyd
-0x73880000  0x5000    C:\Python34\lib\site-packages\Crypto\Random\OSRNG\winrandom.pyd
-0x73890000  0x5000    C:\Python34\lib\site-packages\Crypto\Util\_counter.pyd
-0x71800000  0xa000    C:\Python34\lib\site-packages\Crypto\Cipher\_AES.pyd
-0x70bf0000  0x10000   C:\Python34\lib\site-packages\Crypto\Cipher\_DES3.pyd
-0x6c360000  0x5000    C:\Python34\DLLs\select.pyd
-0x6fd30000  0x8000    C:\Python34\lib\site-packages\Crypto\Cipher\_Blowfish.pyd
-0x6fd20000  0x5000    C:\Python34\lib\site-packages\Crypto\Cipher\_ARC4.pyd
-0x6c370000  0x10000   C:\Python34\DLLs\_bz2.pyd
-0x757c0000  0xb000    C:\Windows\system32\profapi.dll
-0x77950000  0x8f000   C:\Windows\system32\OLEAUT32.dll
-0x773c0000  0x19d000  C:\Windows\system32\SETUPAPI.dll
-0x75980000  0x27000   C:\Windows\system32\CFGMGR32.dll
-0x758f0000  0x12000   C:\Windows\system32\DEVOBJ.dll
-0x76b70000  0x83000   C:\Windows\system32\CLBCatQ.DLL
-0x74350000  0xf5000   C:\Windows\system32\propsys.dll
-0x74c80000  0x21000   C:\Windows\system32\ntmarta.dll
-0x75b30000  0x45000   C:\Windows\system32\WLDAP32.dll
-0x71fb0000  0x58000   C:\Windows\system32\winhttp.dll
-0x71f60000  0x4f000   C:\Windows\system32\webio.dll
-0x756a0000  0x1b000   C:\Windows\system32\SspiCli.dll
-0x74fb0000  0x8000    C:\Windows\system32\credssp.dll
-0x6c340000  0x5000    C:\Windows\system32\shfolder.dll
-0x73f30000  0x130000  C:\Windows\system32\WindowsCodecs.dll
-0x756c0000  0x4c000   C:\Windows\system32\apphelp.dll
-0x74ad0000  0x31000   C:\Windows\system32\EhStorShell.dll
-0x72930000  0x84000   C:\Windows\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_5.82.7601.18837_none_ec86b8d6858ec0bc\COMCTL32.dll
-0x74090000  0x6a000   C:\Windows\System32\cscui.dll
-0x74c70000  0x9000    C:\Windows\System32\CSCDLL.dll
-0x71de0000  0xb000    C:\Windows\system32\CSCAPI.dll
-0x73c50000  0x70000   C:\Windows\system32\ntshrui.dll
-0x75360000  0x19000   C:\Windows\system32\srvcli.dll
-0x73940000  0xa000    C:\Windows\system32\slc.dll
-0x67570000  0x79000   C:\Windows\system32\mscms.dll
-0x74e10000  0x17000   C:\Windows\system32\USERENV.dll
-0x6c1e0000  0x38000   C:\Windows\system32\icm32.dll
-0x674b0000  0xbc000   C:\Python34\DLLs\unicodedata.pyd
-0x751f0000  0x3c000   C:\Windows\system32\mswsock.dll
-0x729d0000  0x6000    C:\Windows\System32\wshqos.dll
-0x74d40000  0x5000    C:\Windows\system32\wshtcpip.DLL
-0x751e0000  0x6000    C:\Windows\system32\wship6.dll
+libffi-6.dll
+libgirepository-1.0-1.dll
+libgio-2.0-0.dll
+libgmodule-2.0-0.dll
+libglib-2.0-0.dll
+libintl-8.dll
+libgobject-2.0-0.dll
+libzzz.dll
+libwinpthread-1.dll
+libgtk-3-0.dll
+libgdk-3-0.dll
+libcairo-gobject-2.dll
+libfontconfig-1.dll
+libxmlxpat.dll
+libfreetype-6.dll
+libharfbuzz-gobject-0.dll
+libpng16-16.dll
+libgdk_pixbuf-2.0-0.dll
+libjasper-1.dll
+libjpeg-8.dll
+librsvg-2-2.dll
+libpango-1.0-0.dll
+libpangocairo-1.0-0.dll
+libpangoft2-1.0-0.dll
+libpangowin32-1.0-0.dll
+libwebp-5.dll
+libatk-1.0-0.dll
+libgtksourceview-3.0-1.dll

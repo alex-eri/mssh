@@ -7,11 +7,13 @@ from cx_Freeze import setup, Executable
 siteDir = site.getsitepackages()[1]
 includeDllPath = os.path.join(siteDir, "gnome")
 
-missingDll = glob.glob(includeDllPath + "\\" + '*.dll')
+#missingDll = glob.glob(includeDllPath + "\\" + '*.dll')
+missingDll = [dll.strip() for dll in open("dlls.txt").readlines()]
+
 
 includeFiles = [("mssh.glade","mssh.glade")]
 
-for DLL in missingDLL:
+for DLL in missingDll:
     includeFiles.append((os.path.join(includeDllPath, DLL), DLL))
     # includeFiles.append(DLL)
 
@@ -22,7 +24,11 @@ for DLL in missingDLL:
 gtkLibs = ['lib\\gdk-pixbuf-2.0',
            'lib\\girepository-1.0',
            'share\\glib-2.0',
-           'lib\\gtk-3.0']
+           'lib\\gtk-3.0',
+           'share\\icons',
+           'share\\locale\\en',
+           'share\\locale\\ru'
+           ]
 
 
 for lib in gtkLibs:
