@@ -192,7 +192,7 @@ class App():
 
     def exec_clicked_cb(self,*args):
         if termtype == "io":
-            terminal.bb = io.BytesIO()
+            self.terminal.bb = io.BytesIO()
         self.running = True
         self.start_btn.set_sensitive(False)
         self.stop_btn.set_sensitive(True)
@@ -210,8 +210,8 @@ class App():
             self.store[path][num] = text
         return edited
 
-    def onoff_toggled_cb(self, widget, path, text):
-        self.editor_cb(0)(widget, path, text)
+    def onoff_toggled_cb(self, widget, path, *args):
+        self.store[path][0] = not self.store[path][0]
 
     def name_edited_cb(self, widget, path, text):
         self.editor_cb(1)(widget, path, text)
