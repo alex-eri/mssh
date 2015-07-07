@@ -9,7 +9,7 @@
       <mime-type>Text</mime-type>
     </mime-types>
     <patterns>
-      <pattern>*.rsh</pattern>
+      <pattern>*.rsc</pattern>
       <pattern>*.txt</pattern>
     </patterns>
   </object>
