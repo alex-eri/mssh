@@ -3,178 +3,21 @@
 import csv
 import threading
 import time
-import paramiko
-import platform
-import string
 
 from gi.repository import GLib, Gtk, Gdk, GtkSource, GObject
 
-try:
-    from gi.repository import  Vte
-    termtype="vte"
-    #raise Exception('hy')
-except:
-    termtype="io"
-    import io,re
-
-    recolor = re.compile(b'\x1b.*?m|\x1b.*?B')
-    #recolor = re.compile(b'\x1b.*?m')
-
-    class TerminalBuffer(GtkSource.Buffer):
-        def __init__(self,*a,**kw):
-                self.bb = io.BytesIO()
-                self.text = Gtk.TextBuffer()
-
-                return super(TerminalBuffer, self).__init__(*a,**kw)
-
-        def feed(self,data):
-                st = self.bb.tell()
-                self.bb.seek(0,2)
-                self.bb.write(data)
-                self.bb.seek(st)
-
-                while True:
-                    st = self.bb.tell()
-                    line = self.bb.readline()
-                    if line and line[-1]==10:
-                        text = recolor.sub(b'',line)
-                        self.feedline(text.decode('utf-8'))
-                    else:
-                        self.bb.seek(st)
-                        break
-
-        def feedline(self,text):
-            #text = ''.join(filter(lambda x: x in string.printable, text))
-            #text = ''.join([c for c in text if ord(c) > 31 or ord(c) == 9 or ord(c) == 10 or ord(c) < 0x84 ])
-            print(text)
-            self.insert(self.get_end_iter(),text)
+from terminalwidget import *
+from sshclient import Script
 
 
 
-class Script():
-    client = None
-    def __init__(self,host,port,username,password):
-        self.host = host
-        self.port = port
-        self.username = username
-        self.password = password
-
-    def connect(self):
-        self.client = paramiko.client.SSHClient()
-        self.client.load_system_host_keys()
-        self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        self.client.connect(self.host,self.port,self.username,self.password,allow_agent=False,look_for_keys=False)
-
-    def write(self,script):
-
-        #transport = paramiko.Transport((host, port))
-        #transport.connect(username = username, password = password)
-
-        #transport = self.client.get_transport()
-        #sftp = paramiko.SFTPClient.from_transport(transport)
-        sftp = self.client.open_sftp()
-        f = sftp.file("msshscript.rsc","w")
-        f.write(script)
-        f.close()
-        sftp.close()
-
-    def execute(self):
-        transport = self.client.get_transport()
-        self.chan = transport.open_session()
-        self.chan.get_pty()
-        self.chan.set_combine_stderr(True)
-        self.chan.settimeout(0.5)
-        #out = chan.makefile('w',80)
-        self.chan.exec_command('/import msshscript.rsc')
-        return self.chan
-
-        #stdin, stdout, stderr = self.client.exec_command('/import msshscript.rsc')
-        #return stdout
-
-
-    def close(self):
-        self.client.close()
-
-
-
-
-def editor_cb(num):
-    def edited(widget, path, text):
-        store[path][num] = text
-    return edited
-
-def tiktreecolumns(tree):
-    check = Gtk.CellRendererToggle()
-    check.connect("toggled", Handler.tik_toggled)
-
-    column1 = Gtk.TreeViewColumn("Вкл", check, active=0)
-
-    name = Gtk.CellRendererText()
-    name.set_property("editable", True)
-    name.connect("edited", editor_cb(1))
-    column4 = Gtk.TreeViewColumn("Микротик",name,text=1)
-
-    column = Gtk.TreeViewColumn("Хост")
-
-    ip = Gtk.CellRendererText()
-    port = Gtk.CellRendererText()
-
-    ip.set_property("editable", True)
-    port.set_property("editable", True)
-
-    ip.connect("edited", editor_cb(2))
-    port.connect("edited", editor_cb(3))
-
-    column.pack_start(ip, True)
-    column.pack_start(port, True)
-
-    column.add_attribute(ip, "text", 2)
-    column.add_attribute(port, "text", 3)
-
-    progress = Gtk.CellRendererProgress()
-    column2 = Gtk.TreeViewColumn("Процесс",progress,value=6)
-    column3 = Gtk.TreeViewColumn("Учётная запись")
-    login = Gtk.CellRendererText()
-    password = Gtk.CellRendererText()
-
-    login.set_property("editable", True)
-    password.set_property("editable", True)
-
-    login.connect("edited", editor_cb(4))
-    password.connect("edited", editor_cb(5))
-
-    column3.pack_start(login, True)
-    column3.pack_start(password, True)
-
-    column3.add_attribute(login, "text", 4)
-    column3.add_attribute(password, "text", 5)
-
-    tree.append_column(column1)
-    tree.append_column(column4)
-    tree.append_column(column2)
-    tree.append_column(column)
-    tree.append_column(column3)
-
-def loadtiks(model):
-    #apply,name,ip,port,login,password
-    try:
-        csvfile = open('tiks.csv', newline='')
-    except FileNotFoundError:
-        return
-    tabledata = csv.reader(csvfile, delimiter=';')
-    for row in tabledata:
-        check,name,ip,port,login,password = row
-        check = bool(check)
-        port = int(port)
-        model.append([check,name,ip,port,login,password,0])
+#decorators
 
 def applyscript(text):
-    #print(text)
+
     def inner(row):
         riter = row.iter
         check,name,ip,port,login,password,progress = row
-        print(name)
-        #row[6] = 0
         GLib.idle_add(row.__setitem__,6,0)
         resp = "\r\n\n"
         resp += "#"*(len(name)+8)
@@ -182,88 +25,142 @@ def applyscript(text):
         resp += "#"*(len(name)+8)
         resp += "\r\n\n"
 
-
         runner = None
         if check:
-            #row[6] = 1
             GLib.idle_add(row.__setitem__,6,1)
             runner = Script(ip,port,login,password)
-            #row[6] = 2
+
             GLib.idle_add(row.__setitem__,6,2)
             try:
                 runner.connect()
             except Ecxeption as e:
-                return  e.message(), chan
-            #row[6] = 5
+                return  resp + e.message(), chan
+
             GLib.idle_add(row.__setitem__,6,5)
             try:
                 runner.write(text)
             except Ecxeption as e:
-                return e.message(), chan
-            #row[6] = 10
+                return resp + e.message(), chan
+
             GLib.idle_add(row.__setitem__,6,10)
             try:
                 chan = runner.execute()
             except Ecxeption as e:
-                return  e.message(), chan
+                return  resp + e.message(), chan
             return  resp, runner
     return inner
 
+#end_decorators
 
-def proccess_exec():
+# thread
 
-    source = builder.get_object("source")
+def pulse(row):
+    if row[6] > 90:
+        row[6] = 15
+    else:
+        row[6] = row[6]+1
+
+def proccess_exec(app):
+    terminal = app.terminal
+    source = app.builder.get_object("source")
     text = source.get_text(source.get_start_iter(), source.get_end_iter(), False)
     text = text + "\nquit"
     fu = applyscript(text)
-    for row in store:
-        #print(type(row))
-        #riter = row.iter
-        r = fu(row)
-        resp,runner = r
-        chan = runner.chan
-        GLib.idle_add(terminal.feed, resp.encode('utf-8'))
-        GLib.idle_add(row.__setitem__,6,11)
+    for row in app.store:
+        if app.running:
+            r = fu(row)
+            resp,runner = r
+            chan = runner.chan
+            GLib.idle_add(terminal.feed, resp.encode('utf-8'))
+            GLib.idle_add(row.__setitem__,6,11)
 
-        while not chan.exit_status_ready():
-            try:
-                GLib.idle_add(terminal.feed, chan.recv(120))
+            while not chan.exit_status_ready():
+                try:
+                    GLib.idle_add(terminal.feed, chan.recv(120))
+                    GLib.idle_add(pulse, row)
+                except:
+                    time.sleep(0.02)
 
-#                if row[6] > 90:
-#                    row[6] = 15
-#                else:
-#                    row[6] = row[6]+1
-            except:
-                time.sleep(0.02)
-            #"] > "
+            chan.close()
+            GLib.idle_add(row.__setitem__,6,99)
+            runner.close()
+            GLib.idle_add(row.__setitem__,6,100)
 
-        chan.close()
-        #row[6] = 99
-        GLib.idle_add(row.__setitem__,6,99)
-        runner.close()
-        #row[6] = 100
-        GLib.idle_add(row.__setitem__,6,100)
+    GLib.idle_add(app.ended_cb)
 
+# end thread
 
-class Handler:
-    def exec_clicked(self,*args):
-        terminal.bb = io.BytesIO()
-        threading.Thread(target=proccess_exec).start()
+# app
+class App():
+    running = False
+    def __init__(self,*a,**kw):
+        self.builder = builder = Gtk.Builder()
+        builder.add_from_file("mssh.glade")
+        builder.connect_signals(self)
 
+        self.store = builder.get_object("tikstore")
+        self.loadtiks()
 
-    def exit_clicked_cb(self, *args):
+        scrolledterminal = builder.get_object("scrolledterminal")
+        if termtype == "vte":
+            self.terminal = Vte.Terminal()
+            scrolledterminal.add(self.terminal)
+        else:
+            self.terminal = TerminalBuffer()
+            terminalsource = GtkSource.View.new_with_buffer(self.terminal)
+            scrolledterminal.add(terminalsource)
+
+        self.start_btn = builder.get_object("exec")
+        self.stop_btn = builder.get_object("stop")
+        try:
+            builder.get_object("sourceview").set_monospace(True)
+        except AttributeError:
+            pass
+
+        self.window = builder.get_object("mainwindow")
+        self.window.set_name("mssh")
+
+    def loadtiks(self):
+        #apply,name,ip,port,login,password
+        try:
+            csvfile = open('tiks.csv', newline='')
+        except FileNotFoundError:
+            return
+        tabledata = csv.reader(csvfile, delimiter=';')
+        for row in tabledata:
+            check,name,ip,port,login,password = row
+            check = bool(check)
+            port = int(port)
+            self.store.append([check,name,ip,port,login,password,0])
+
+    def store_changed(self,model,*args):
+        csvfile = open('tiks.csv','w', newline='')
+        tabledata = csv.writer(csvfile, delimiter=';')
+        for row in model:
+            check,name,ip,port,login,password,progress = row
+            tabledata.writerow([check,name,ip,port,login,password])
+        csvfile.close()
+
+    def exit_cb(self, *args):
+        self.running = False
         Gtk.main_quit(*args)
 
     def file_set(self, widget):
         fn = widget.get_filename()
-        source = builder.get_object("source")
+        source = self.builder.get_object("source")
         source.set_text(open(fn).read())
+        self.builder.get_object("savescript").set_sensitive(True)
 
-    def select_page(self,*args):
-        pass
+    def savescript_clicked_cb(self, widget):
+        fn = widget.get_filename()
+        source = self.builder.get_object("source")
+        open(fn,'w').write(source.get_text(source.get_start_iter(), source.get_end_iter(), False))
 
-    def tik_toggled(self,path):
-        store[path][0] = not store[path][0]
+    def clear_clicked_cb(self,*args):
+        fo = self.builder.get_object("openscript")
+        fo.set_filename("")
+        self.builder.get_object("source").source.set_text("")
+        self.builder.get_object("savescript").set_sensitive(True)
 
     def deltik_clicked(self,selection,*args):
         model,rows = selection.get_selected_rows()
@@ -283,44 +180,57 @@ class Handler:
             selection.unselect_path(orow)
         selection.select_iter(row)
 
-    def store_changed(self,model,*args):
-        csvfile = open('tiks.csv','w', newline='')
-        tabledata = csv.writer(csvfile, delimiter=';')
-        for row in model:
-            check,name,ip,port,login,password,progress = row
-            tabledata.writerow([check,name,ip,port,login,password])
-        csvfile.close()
+    def check_clicked_cb(self,selection):
+        model,rows = selection.get_selected_rows()
+        for r in rows:
+            model[r][0] = True
 
-    def cursor(self,tree,*args):
-        path,col = tree.get_cursor()
-        print(path)
+    def uncheck_clicked_cb(self,selection):
+        model,rows = selection.get_selected_rows()
+        for r in rows:
+            model[r][0] = False
 
+    def exec_clicked_cb(self,*args):
+        if termtype == "io":
+            terminal.bb = io.BytesIO()
+        self.running = True
+        self.start_btn.set_sensitive(False)
+        self.stop_btn.set_sensitive(True)
+        threading.Thread(target=proccess_exec,args=(self,)).start()
 
+    def ended_cb(self):
+        self.stop_btn.set_sensitive(False)
+        self.start_btn.set_sensitive(True)
 
-GObject.type_register(GtkSource.View)
-builder = Gtk.Builder()
-builder.add_from_file("mssh.glade")
-builder.connect_signals(Handler())
+    def stop_clicked_cb(self,*args):
+        self.running = False
 
-store = builder.get_object("tikstore")
-loadtiks(store)
+    def editor_cb(self,num):
+        def edited(widget, path, text):
+            self.store[path][num] = text
+        return edited
 
-tree = builder.get_object("tikview")
-tiktreecolumns(tree)
+    def onoff_toggled_cb(self, widget, path, text):
+        self.editor_cb(0)(widget, path, text)
 
-scrolledterminal = builder.get_object("scrolledterminal")
-if termtype == "vte":
-    terminal = Vte.Terminal()
-    scrolledterminal.add(terminal)
-else:
-    terminal = TerminalBuffer()
-    terminalsource = GtkSource.View.new_with_buffer(terminal)
-    scrolledterminal.add(terminalsource)
+    def name_edited_cb(self, widget, path, text):
+        self.editor_cb(1)(widget, path, text)
 
+    def ip_edited_cb(self, widget, path, text):
+        self.editor_cb(2)(widget, path, text)
 
-window = builder.get_object("mainwindow")
-window.set_name("mssh")
+    def port_edited_cb(self, widget, path, text):
+        self.editor_cb(3)(widget, path, text)
 
-window.show_all()
-GObject.threads_init()
-Gtk.main()
+    def login_edited_cb(self, widget, path, text):
+        self.editor_cb(4)(widget, path, text)
+
+    def password_edited_cb(self, widget, path, text):
+        self.editor_cb(5)(widget, path, text)
+
+if __name__ == "__main__":
+    app = App()
+    app.window.show_all()
+    GObject.threads_init()
+    Gtk.main()
+        
