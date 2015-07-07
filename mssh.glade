@@ -306,6 +306,7 @@
                           <object class="GtkTreeViewColumn" id="check_col">
                             <property name="title" translatable="yes">Вкл</property>
                             <property name="sort_indicator">True</property>
+                            <property name="sort_column_id">0</property>
                             <child>
                               <object class="GtkCellRendererToggle" id="onoff">
                                 <signal name="toggled" handler="onoff_toggled_cb" swapped="no"/>
@@ -321,6 +322,7 @@
                             <property name="resizable">True</property>
                             <property name="title" translatable="yes">Микротик</property>
                             <property name="sort_indicator">True</property>
+                            <property name="sort_column_id">1</property>
                             <child>
                               <object class="GtkCellRendererText" id="name">
                                 <property name="editable">True</property>
@@ -350,7 +352,7 @@
                             <property name="resizable">True</property>
                             <property name="title" translatable="yes">Хост и порт</property>
                             <property name="sort_indicator">True</property>
-                            <property name="sort_column_id">0</property>
+                            <property name="sort_column_id">2</property>
                             <child>
                               <object class="GtkCellRendererText" id="ip">
                                 <property name="editable">True</property>
@@ -376,7 +378,7 @@
                             <property name="resizable">True</property>
                             <property name="title" translatable="yes">Учётная запись</property>
                             <property name="sort_indicator">True</property>
-                            <property name="sort_column_id">0</property>
+                            <property name="sort_column_id">4</property>
                             <child>
                               <object class="GtkCellRendererText" id="login">
                                 <property name="editable">True</property>
