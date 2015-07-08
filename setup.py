@@ -28,8 +28,7 @@ gtkLibs = ['lib\\gdk-pixbuf-2.0',
            'share\\icons',
            'share\\locale\\en',
            'share\\locale\\ru',
-           'etc\\fonts',
-           'etc\\gtk-3.0'
+           'etc\\fonts'
            ]
 
 
