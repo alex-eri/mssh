@@ -174,7 +174,7 @@ class App():
 
     def addtik_clicked(self,model):
         row = model.append([False,"Новый Mikrotik","192.168.88.1",22,"admin","",0])
-        selection=builder.get_object("tikselection")
+        selection = self.builder.get_object("tikselection")
         m,rows = selection.get_selected_rows()
         for orow in rows:
             selection.unselect_path(orow)
