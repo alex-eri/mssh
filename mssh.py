@@ -167,7 +167,7 @@ class App():
         fordelete = []
         for row in rows:
             #selection.unselect_path(row)
-            fordelete.append(Gtk.TreeRowReference(model,row))
+            fordelete.append(Gtk.TreeRowReference.new(model,row))
         for row in fordelete:
             path = row.get_path()
             del model[path]
