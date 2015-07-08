@@ -220,7 +220,11 @@ class App():
         self.editor_cb(2)(widget, path, text)
 
     def port_edited_cb(self, widget, path, text):
-        self.editor_cb(3)(widget, path, text)
+        try:
+            port = int(text)
+        except ValueError:
+            return
+        self.editor_cb(3)(widget, path, port)
 
     def login_edited_cb(self, widget, path, text):
         self.editor_cb(4)(widget, path, text)
