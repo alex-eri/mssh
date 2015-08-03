@@ -33,19 +33,19 @@ def applyscript(text):
             GLib.idle_add(row.__setitem__,6,2)
             try:
                 runner.connect()
-            except Ecxeption as e:
+            except Exception as e:
                 return  resp + e.message(), chan
 
             GLib.idle_add(row.__setitem__,6,5)
             try:
                 runner.write(text)
-            except Ecxeption as e:
+            except Exception as e:
                 return resp + e.message(), chan
 
             GLib.idle_add(row.__setitem__,6,10)
             try:
                 chan = runner.execute()
-            except Ecxeption as e:
+            except Exception as e:
                 return  resp + e.message(), chan
             return  resp, runner
     return inner
